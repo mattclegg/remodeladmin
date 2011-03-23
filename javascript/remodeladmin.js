@@ -38,10 +38,8 @@ $(document).ready(function() {
 				if(window.onresize) window.onresize();
 			}
 		});
-		return false;
+		return true;
 	});
 	
 });
 })(jQuery);
-
-
