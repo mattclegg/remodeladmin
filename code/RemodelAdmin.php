@@ -80,8 +80,7 @@ class RemodelAdmin_RecordController extends ModelAdmin_RecordController {
 	
 			
 			$form->setActions($this->currentRecord->getCMSActions());
-			$form->Fields()->insertFirst(new LiteralField('view','<div class="publishpreviews clr">'._t('RemodelAdmin.VIEW','View Page').': <a target="_blank" href="'.$live_link.'">'._t('RemodelAdmin.VIEWLIVE','Live Site').'</a> <a target="_blank" href="'.$stage_link.'">'._t('RemodelAdmin.VIEWDRAFT','Draft Site').'</a></div></div>'
-			));;
+			$form->Fields()->insertFirst(new LiteralField('view','<div class="publishpreviews clr">'._t('RemodelAdmin.VIEW','View Page').': <a target="_blank" href="'.$live_link.'">'._t('RemodelAdmin.VIEWLIVE','Live Site').'</a> <a target="_blank" href="'.$stage_link.'">'._t('RemodelAdmin.VIEWDRAFT','Draft Site').'</a></div></div>'));
 	
 			if($parent = $this->parentController->parentController->getParentPage()) {
 				$form->Fields()->push(new HiddenField('ParentID','', $parent->ID));
