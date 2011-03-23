@@ -1,0 +1,11 @@
+<?php
+class BlogAdmin extends RemodelAdmin {
+
+	static $managed_models = array (
+		'BlogEntry'
+	);
+
+	static $url_segment = "blog";
+
+	static $parent = "blog";
+}
