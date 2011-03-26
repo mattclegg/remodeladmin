@@ -90,7 +90,7 @@ class RemodelAdmin_RecordController extends ModelAdmin_RecordController {
 			}
 		
 		}		
-    	$form->Fields()->insertFirst(new LiteralField('back','<div class="modelpagenav clr"><button id="list_view">&laquo; '._t('RemodelAdmin.BACKTOLIST','Back to list view').'</button>'));		
+    	$form->Fields()->insertFirst(new LiteralField('back','<div class="modelpagenav clr"><button id="list_view">&laquo; '._t('RemodelAdmin.BACKTOLIST','Back to list view').'</button></div>'));		
 
 		return $form;	
 	}
