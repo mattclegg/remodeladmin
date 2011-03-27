@@ -19,3 +19,4 @@ button#list_view:hover { background-color:#bbb; }
 .publishpreviews { float:left; margin:0 0 0 20px; font-size:12px; font-weight:700; line-height:22px; }
 .publishpreviews a { margin:0 0 0 7px; }
 
+.tab {height: auto !important;}
