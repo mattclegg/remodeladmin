@@ -1,11 +1,10 @@
 <?php
 class RemodelAdmin extends ModelAdmin {
-
 	public static $collection_controller_class = "RemodelAdmin_CollectionController";
-
 	public static $record_controller_class = "RemodelAdmin_RecordController";
-	
 	public static $parent_page_type = "SiteTree";
+	public $showImportForm = false;
+	
 	
 	public function init() {
 	    parent::init();
@@ -65,6 +64,28 @@ class RemodelAdmin_CollectionController extends ModelAdmin_CollectionController 
 		return $query;
 	}
 	
+	public function columnsAvailable() {
+		return singleton($this->modelClass)->summaryFields();
+	}
+
+	public function columnsSelectedByDefault() {
+		$singleton = singleton($this->modelClass);
+		$full = $singleton->stat('default_summary_fields');
+		
+		if ($full) {
+			$fields = $singleton->stat('default_summary_fields');
+			if($fields && array_key_exists(0, $fields)) {
+				$fields = array_combine(array_values($fields), array_values($fields));
+			}
+			
+		} else {
+			$fields = $singleton->summaryFields();
+		}
+		
+
+		return array_keys($fields);
+	}	
+
 
 
 }
