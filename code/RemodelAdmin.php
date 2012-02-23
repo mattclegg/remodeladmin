@@ -1,10 +1,9 @@
-<?php
+﻿<?php
 class RemodelAdmin extends ModelAdmin {
 	public static $collection_controller_class = "RemodelAdmin_CollectionController";
 	public static $record_controller_class = "RemodelAdmin_RecordController";
 	public static $parent_page_type = "SiteTree";
 	public $showImportForm = false;
-	
 	
 	public function init() {
 	    parent::init();
@@ -14,10 +13,7 @@ class RemodelAdmin extends ModelAdmin {
 	    $config->setButtonsForLine(2,$buttons);
 	    Requirements::javascript('remodeladmin/javascript/remodeladmin.js');
 	    Requirements::css('remodeladmin/css/remodeladmin.css');
-
 	}
-
-
 
 	public function SearchClassSelector() {
 		return "dropdown";
@@ -26,19 +22,6 @@ class RemodelAdmin extends ModelAdmin {
 	public function ListView() {
 		return $this->search(array(), $this->SearchForm());
 	}
-	
-	public function getParentPage() {
-		if($parent = $this->stat('parent')) {
-			if(is_numeric($parent)) {
-				return DataObject::get_by_id($this->modelClass(), $parent);
-			}
-			elseif(is_string($parent)) {
-				return SiteTree::get_by_link($parent);
-			}			
-		}
-		return false;	
-	}
-
 }
 
 class RemodelAdmin_CollectionController extends ModelAdmin_CollectionController {
@@ -46,6 +29,9 @@ class RemodelAdmin_CollectionController extends ModelAdmin_CollectionController 
 	function add($request) {
 		$class = $this->modelClass;
 		$record = new $class();
+		if($parent = $this->getParentPage()) {
+			$record->ParentID = $parent->ID;					
+		}
 		$record->write();
 		$class = $this->parentController->getRecordControllerClass($this->getModelClass());
 		$response = new $class($this, $request, $record->ID);
@@ -57,13 +43,41 @@ class RemodelAdmin_CollectionController extends ModelAdmin_CollectionController 
 		if(!is_subclass_of($this->getModelClass(),"SiteTree")) {
 			return $query;
 		}
-		$query->orderby("`SiteTree`.LastEdited DESC");
-		if($page = $this->parentController->getParentPage()) {
-			$query->where[] = "ParentID = $page->ID";					
+		// only get children of correct parent
+		if($parent = $this->getParentPage()) {
+			$query->where[] = "ParentID = $parent->ID";
 		}
 		return $query;
 	}
 	
+	public function getParentPage() {
+		if($parent = $this->parentController->stat("parent")) {
+			if (is_array($parent)) {
+				$parent = $parent[$this->getModelClass()];
+			}
+			if(is_numeric($parent)) {
+				return DataObject::get_by_id($this->getModelClass(), $parent);
+			}
+			elseif(is_string($parent)) {
+				return SiteTree::get_by_link($parent);
+			}			
+		}
+		return false;	
+	}
+	
+	function getResultsTable($searchCriteria) {
+		$tf = parent::getResultsTable($searchCriteria);
+		if(is_subclass_of($this->getModelClass(),"SiteTree")) {
+			//remove delete button in table because of versioning
+			$tf->setPermissions(array_diff($tf->getPermissions(), array('delete','export')));
+			// add column for stage
+			$fieldlist = $tf->FieldList();
+			$fieldlist["Status"] = _t('RemodelAdmin.STATUS', 'Status');
+			$tf->setFieldList($fieldlist);
+		}
+		return $tf;
+	}
+
 	public function columnsAvailable() {
 		return singleton($this->modelClass)->summaryFields();
 	}
@@ -71,22 +85,16 @@ class RemodelAdmin_CollectionController extends ModelAdmin_CollectionController 
 	public function columnsSelectedByDefault() {
 		$singleton = singleton($this->modelClass);
 		$full = $singleton->stat('default_summary_fields');
-		
 		if ($full) {
 			$fields = $singleton->stat('default_summary_fields');
 			if($fields && array_key_exists(0, $fields)) {
 				$fields = array_combine(array_values($fields), array_values($fields));
 			}
-			
 		} else {
 			$fields = $singleton->summaryFields();
 		}
-		
-
 		return array_keys($fields);
 	}	
-
-
 
 }
 
@@ -103,15 +111,16 @@ class RemodelAdmin_RecordController extends ModelAdmin_RecordController {
 			$form->setActions($this->currentRecord->getCMSActions());
 			$form->Fields()->insertFirst(new LiteralField('view','<div class="publishpreviews clr">'._t('RemodelAdmin.VIEW','View Page').': <a target="_blank" href="'.$live_link.'">'._t('RemodelAdmin.VIEWLIVE','Live Site').'</a> <a target="_blank" href="'.$stage_link.'">'._t('RemodelAdmin.VIEWDRAFT','Draft Site').'</a></div></div>'));
 	
-			if($parent = $this->parentController->parentController->getParentPage()) {
+			if($parent = $this->parentController->getParentPage()) {
 				$form->Fields()->push(new HiddenField('ParentID','', $parent->ID));
 			}
 			elseif($parent_class = $this->parentController->stat('parent_page_type')) {
 				$form->Fields()->push(new SimpleTreeDropdownField('ParentID', _t('RemodelAdmin.PARENTPAGE','Parent page'), $parent_class));
 			}
 		
-		}		
-    	$form->Fields()->insertFirst(new LiteralField('back','<div class="modelpagenav clr"><button id="list_view">&laquo; '._t('RemodelAdmin.BACKTOLIST','Back to list view').'</button></div>'));		
+		}
+    	
+		$form->Fields()->insertFirst(new LiteralField('back','<div class="modelpagenav clr"><button id="list_view">&laquo; '._t('RemodelAdmin.BACKTOLIST','Back to list view').'</button></div>'));		
 
 		return $form;	
 	}
