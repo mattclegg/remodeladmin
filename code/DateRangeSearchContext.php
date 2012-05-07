@@ -8,7 +8,7 @@ class DateRangeSearchContext extends SearchContext {
 			$dates = array ();
 			foreach($fields as $f) {
 				$type = singleton($this->modelClass)->obj($f->Name())->class;
-				if($type == "Date" || $type == "SS_Datetime") {
+				if(ClassInfo::is_subclass_of($type, 'Date')) {
 					$dates[] = $f;
 				}
 			}
@@ -18,8 +18,8 @@ class DateRangeSearchContext extends SearchContext {
 				$fields->push($b = new DateField($d->Name().'_max',$d->Title()." ("._t('DateRange.END','end').")"));
 				$a->setConfig('showcalendar',true);
 				$b->setConfig('showcalendar',true);
-				$a->setConfig('dateformat','yyyy-MM-dd');
-				$b->setConfig('dateformat','yyyy-MM-dd');
+				$a->setConfig('dateformat',i18n::get_date_format());
+				$b->setConfig('dateformat',i18n::get_date_format());
 			}
 		}
 		return $fields;

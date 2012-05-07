@@ -13,6 +13,7 @@ $lang['en_US']['ModelAdmin']['UNPUBLISHED'] = 'Unpublished';
 $lang['en_US']['RemodelAdmin']['BACKTOLIST'] = 'Back to list view';
 $lang['en_US']['RemodelAdmin']['LOADING'] = 'Loading...';
 $lang['en_US']['RemodelAdmin']['PARENTPAGE'] = 'Parent page';
+$lang['en_US']['RemodelAdmin']['STATUS'] = 'Status';
 $lang['en_US']['RemodelAdmin']['VIEW'] = 'View Page';
 $lang['en_US']['RemodelAdmin']['VIEWDRAFT'] = 'Draft Site';
 $lang['en_US']['RemodelAdmin']['VIEWLIVE'] = 'Live Site';

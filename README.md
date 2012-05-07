@@ -46,7 +46,36 @@ Can specify which summary fields are selected by default by putting something li
 Name, Email, Created and Page will all be available in the list of fields but only Name, Email and Created will be checked by default.
 If $default_summary_fields isn't set then everything in $summary_fields will be on by default.
 
+Managed Models:
 
+In you admin class extending RemodelAdmin you can specify the managed Models for this admin:
+
+```php
+	static $managed_models = array (
+		'NewsPage',
+		'BlogEntry'
+	);
+```
+
+If you want to define different parents for the different models, you can do this as follows:
+	
+```php
+	static $parent = array(
+		'NewsPage' => 'archive',
+		'BlogEntry' => 'blog'
+	);
+```
+
+Hide Child Pages:
+
+If you want to hide the managed page types in the site tree, add the following in your _config.php:
+
+```php
+	Object::add_extension('BlogHolder', 'HideChildrenDecorator');
+```
+
+All child elements of the BlogHolder pages will be hidden. The pages are not loaded to the sitetree, wich 
+results in much hiegher performance. 
 
 Known Issues
 ------------

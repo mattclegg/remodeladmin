@@ -6,7 +6,7 @@ $(document).ready(function() {
      var strFormname = "#Form_SearchForm" + currentModelName.replace('Form','');
      $(strFormname).submit();
      return false;
-   }
+   };
    
    $('#ModelClassSelector').live("change",doList);
    $('#list_view').live("click",doList);
@@ -22,6 +22,7 @@ $(document).ready(function() {
 		if(typeof tinyMCE != 'undefined') tinyMCE.triggerSave();
 		$.ajax({
 			url : formAction,
+			type: "POST",
 			data : form.formToArray(),
 			dataType : "json",
 			success : function(json) {
@@ -43,3 +44,5 @@ $(document).ready(function() {
 	
 });
 })(jQuery);
+
+
