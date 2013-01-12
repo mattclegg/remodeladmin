@@ -1,10 +1,11 @@
 SilverStripe RemodelAdmin
 ===================================
 
-Basically a subclass of ModelAdmin for holding useful and common customisations.  Based on the work of UncleCheese (http://www.leftandmain.com/uncategorized/2011/02/25/taming-the-beast-remodeling-modeladmin/) and Matt Clegg (https://github.com/mattclegg/remodeladmin)
+Basically a subclass of ModelAdmin for holding useful and common customisations.  Based on the work of UncleCheese (http://www.leftandmain.com/uncategorized/2011/02/25/taming-the-beast-remodeling-modeladmin/).
 
 Maintainer Contacts
 -------------------
+* Matt Clegg (<cleggmatt@gmail.com>)
 * Nathan Cox (<nathan@flyingmonkey.co.nz>)
 
 Requirements
