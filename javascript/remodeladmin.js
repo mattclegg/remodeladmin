@@ -24,6 +24,7 @@ $(document).ready(function() {
 			url : formAction,
 			data : form.formToArray(),
 			dataType : "json",
+			type : form.attr("method") || "POST",
 			success : function(json) {
 				tinymce_removeAll();
 				
